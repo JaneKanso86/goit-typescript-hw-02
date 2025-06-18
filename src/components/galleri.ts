@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ApiResponse } from './types';
+import { ApiResponse } from '../components/types';
 
 const ACCESS_KEY = import.meta.env.VITE_REACT_API_KEY;
 
