@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchImages } from '../imageApi';
-import { Toaster } from 'react-hot-toast';
+import { ImageData, ApiResponse } from '../types';
+import { getUnsplashData } from '../galleri';
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageGallery from '../ImageGallery/ImageGallery';
@@ -9,18 +9,18 @@ import Loader from '../Loader/Loader';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import SearchBar from '../SearchBar/SearchBar';
 
-import './App.module.css';
-import React from 'react';
+import './App.css';
+import { Toaster } from 'react-hot-toast';
 
 export default function App() {
-  const [query, setQuery] = useState('');
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [noResults, setNoResults] = useState(false);
+  const [query, setQuery] = useState<string>('');
+  const [images, setImages] = useState<ImageData[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
+  const [noResults, setNoResults] = useState<boolean>(false);
 
   useEffect(() => {
     if (!query) return;
@@ -31,7 +31,7 @@ export default function App() {
         setError(null);
         setNoResults(false);
 
-        const data = await fetchImages(query, page);
+        const data: ApiResponse = await getUnsplashData({ query, page });
 
         if (data.results.length === 0 && page === 1) {
           setNoResults(true);
@@ -41,8 +41,6 @@ export default function App() {
         setImages((prev) =>
           page === 1 ? data.results : [...prev, ...data.results],
         );
-
-        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setError('Something went wrong...');
       } finally {
@@ -53,13 +51,13 @@ export default function App() {
     loadImages();
   }, [query, page]);
 
-  const handleSearch = (newQuery) => {
+  const handleSearch = (newQuery: string): void => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
   };
 
-  const handleLoadMore = () => {
+  const handleLoadMore = (): void => {
     setPage((prev) => prev + 1);
   };
 
