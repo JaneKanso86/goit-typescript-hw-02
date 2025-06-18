@@ -4,6 +4,11 @@ import { ApiResponse } from '../components/types';
 
 const ACCESS_KEY = import.meta.env.VITE_REACT_API_KEY;
 
+interface RequestParams {
+  query: string;
+  page: number;
+}
+
 export const getUnsplashData = async ({
   query,
   page,

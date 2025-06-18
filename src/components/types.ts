@@ -5,16 +5,15 @@ export interface Urls {
 }
 export interface ImageData {
   id: string;
+  urls: {
+    small: string;
+    regular: string;
+    full: string;
+  };
   alt_description: string;
-  description: string | null;
-  width: number;
-  height: number;
-  likes: number;
   user: {
     name: string;
-    portfolio_url?: string;
   };
-  urls: Urls;
 }
 
 export interface ImagePositionProps {
